@@ -7,7 +7,32 @@ let temp = document.querySelector('.temp')
 let weather = document.querySelector('.weather')
 let hiLow = document.querySelector('.hi-low')
 
-function showData (data) {
+let apiData = {
+    url: 'http://api.openweathermap.org/data/2.5/weather?q=',
+    key: '9e5ed5ca4cc9bfcc64204f40b23b2d7a'
+}
+
+function fetchData() {
+
+    let countryValue = input.value
+
+    fetch(`${apiData.url}${countryValue}&&appid=${apiData.key}`).
+        then(res => res.json())
+        .then(data => {
+
+            console.log(data);
+            showData(data)
+        })
+}
+
+input.addEventListener('keyup', (event) => {
+
+    if (event.keyCode === 13) {
+        fetchData()
+    }
+})
+
+function showData(data) {
 
     city.innerHTML = input.value + ', ' + data.sys.country
     date.innerHTML = showDate()
@@ -17,11 +42,11 @@ function showData (data) {
 }
 
 
-function showDate () {
+function showDate() {
 
 
     let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        
+
     let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
     let now = new Date()
@@ -30,6 +55,6 @@ function showDate () {
     let month = months[now.getMonth()]
     let year = now.getFullYear()
     let date = now.getDate()
-    
+
     return `${day} ${date} ${month} ${year}`
 }
